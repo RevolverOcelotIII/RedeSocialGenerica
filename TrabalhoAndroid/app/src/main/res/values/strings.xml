@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">TrabalhoAndroid</string>
+    <string name="logoname">Rede Social Genérica</string>
+    <string name="nome">Nome:</string>
+    <string name="email">Email:</string>
+    <string name="senha">Senha:</string>
+    <string name="telefone">Número de telefone:</string>
+    <string name="confirmasenha">Confirmar senha:</string>
+    <string name="login">Login</string>
+    <string name="cadastro">Cadastro</string>
+    <string name="cadastrar">Cadastrar</string>
+    <string name="logar">Entrar</string>
+    <string name="imageselect">Selecionar imagem</string>
+</resources>
