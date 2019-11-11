@@ -1,13 +1,15 @@
-package com.trab.myapplication;
+package com.trab.myapplication.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.trab.myapplication.R;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -32,6 +34,10 @@ public class SplashScreen extends AppCompatActivity {
                 if(percent>=100){
                     timer.cancel();
                     finish();
+                    SharedPreferences preferences = getSharedPreferences(LoginScreen.SAVED_USER,0);
+                    if(preferences.contains("LoggedUserId")){
+
+                    }
                     Intent intent = new Intent(SplashScreen.this,LoginScreen.class);
                     startActivity(intent);
                 }

@@ -1,14 +1,16 @@
-package com.trab.myapplication;
+package com.trab.myapplication.Activity;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
-import android.database.Cursor;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,12 +18,22 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.trab.myapplication.R;
+import com.trab.myapplication.Model.User;
+import com.trab.myapplication.Model.UserDAO;
+
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public class LoginScreen extends AppCompatActivity {
-
+    public static final String SAVED_USER = "user_data";
+    final UserDAO userDAO = new UserDAO(getApplicationContext());
+    final User user = new User();
+    public boolean imagechosed=false;
+    public final Button srchbtn = (Button) findViewById(R.id.catchimage);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +50,6 @@ public class LoginScreen extends AppCompatActivity {
         final TableLayout cadastrotable = (TableLayout) findViewById(R.id.cadastrotable);
         final CheckBox logcheck = (CheckBox) findViewById(R.id.logcheck);
         final Button logbtn = (Button) findViewById(R.id.logbtn);
-        Button srchbtn = (Button) findViewById(R.id.catchimage);
-        final UserDAO userDAO = new UserDAO(getApplicationContext());
 
         srchbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,25 +82,43 @@ public class LoginScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!logcheck.isChecked()){
-                    User user = new User(nometext.getText().toString(),emailtext.getText().toString(),senhatext.getText().toString(),telefonetext.getText().toString(),"");
-                    if(userDAO.searchUserByEmail(user.email)){
-
+                    user.nome = nometext.getText().toString();
+                    user.email = emailtext.getText().toString();
+                    user.senha = senhatext.getText().toString();
+                    user.telefone = telefonetext.getText().toString();
+                    if(userDAO.searchUserByEmail(user.email)||user.nome==""||user.telefone==""||user.email==""||user.senha==""||!imagechosed){
+                        Toast.makeText(getApplicationContext(),"Não foi possivel efetuar o cadastro :0 , veja o que deu errado aí",Toast.LENGTH_LONG).show();
                     }
                     else {
-                        userDAO.saveUser(user);
+                        try {
+                            userDAO.saveUser(user);
+                            SharedPreferences preferences = getSharedPreferences(SAVED_USER, 0);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putInt("LoggedUserId", user.id);
+                            editor.commit();
+                        }catch (Exception e){
+                            Toast.makeText(getApplicationContext(),"Não foi possivel efetuar o cadastro, veja o que deu errado aí, mas também pode ter sido erro nosso, então desculpa se for :)",Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
             }
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(resultCode==RESULT_OK && requestCode==1){
             try {
+                imagechosed = true;
                 InputStream inputStream = getContentResolver().openInputStream(data.getData());
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                Uri tempuri = get
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
+                byte imageInByte[] = stream.toByteArray();
+                user.imagesource = imageInByte;
+                srchbtn.setBackground(new BitmapDrawable(getResources(),bitmap));
+                //Bitmap btm = BitmapFactory.decodeByteArray(imageInByte,0,imageInByte.length);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }

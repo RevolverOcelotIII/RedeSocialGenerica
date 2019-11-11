@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="6dp"
+    android:orientation="vertical"
+    android:background="@color/branco"
+    android:elevation="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/userimage"
+                android:layout_width="52dp"
+                android:layout_height="55dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/usernamefield"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Daniel Galdino"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.061"
+                app:layout_constraintStart_toEndOf="@+id/userimage"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/datetimefield"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="18:56"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.041"
+                app:layout_constraintStart_toEndOf="@+id/userimage"
+                app:layout_constraintTop_toBottomOf="@+id/usernamefield" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/descricaofield"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fodo foda topper" />
+
+        <ImageView
+            android:id="@+id/postimage"
+            android:layout_width="match_parent"
+            android:layout_height="274dp"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+        <Button
+            android:id="@+id/likebtn"
+            style="?attr/buttonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_favorite_border_black_24dp"
+            android:elevation="6dp"
+            android:text="Curtir" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

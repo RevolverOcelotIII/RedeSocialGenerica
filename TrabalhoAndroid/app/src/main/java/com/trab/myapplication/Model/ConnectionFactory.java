@@ -1,4 +1,4 @@
-package com.trab.myapplication;
+package com.trab.myapplication.Model;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,6 +13,7 @@ public class ConnectionFactory extends SQLiteOpenHelper {
     public static String NAME = "redesocialgenerica";
     public static String TABELA_USER = "usuario";
     public static String TABELA_POST = "post";
+    public static String TABELA_LIKES = "likes";
     public ConnectionFactory(@Nullable Context context) {
         super(context, NAME, null, VERSION);
     }
@@ -26,15 +27,22 @@ public class ConnectionFactory extends SQLiteOpenHelper {
                     "    email varchar(100),\n" +
                     "    senha varchar(100),\n" +
                     "    numero varchar(10),\n" +
-                    "    profilesource varchar(100));\n");
+                    "    profilesource blob);\n");
             db.execSQL(
                     "create table if not exists "+TABELA_POST+"(\n" +
                             "\tid integer primary key autoincrement,\n" +
                             "    descricao varchar (500),\n" +
-                            "    imagesource varchar (200),\n" +
+                            "    imagesource blob,\n" +
                             "    userid int,\n" +
-                            "    datapublicacao datetime,\n" +
-                            "    foreign key (userid) references user(id));");
+                            "    datapublicacao varchar(10),\n" +
+                            "    foreign key (userid) references "+TABELA_USER+"(id));");
+            db.execSQL(
+                    "create table if not exists "+TABELA_LIKES+"(\n" +
+                            "\t userid integer primary key,\n" +
+                            " postid integer primary key,\n" +
+                            " foreign key (userid) references "+TABELA_USER+"(id)," +
+                            " foreign key (postid) references "+TABELA_POST+"(id));"
+            );
         }catch(Exception e){
 
         }
