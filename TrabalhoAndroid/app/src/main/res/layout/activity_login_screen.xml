@@ -85,8 +85,6 @@
             android:background="@color/toolbar"
             android:text="@string/cadastrar"
             android:textColor="@color/branco" />
-
-
     </TableLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

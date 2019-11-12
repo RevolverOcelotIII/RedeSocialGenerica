@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.TimeLine"></activity>
+        <activity android:name=".Activity.UserDetails"></activity>
+        <activity android:name=".Activity.TimeLine" />
         <activity android:name=".Activity.LoginScreen" />
         <activity android:name=".Activity.SplashScreen">
             <intent-filter>

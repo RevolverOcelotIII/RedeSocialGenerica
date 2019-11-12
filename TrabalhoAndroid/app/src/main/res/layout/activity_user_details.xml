@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Activity.UserDetails">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/usereditimage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.056"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/usernamefield"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Daniel Galdino"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.173"
+            app:layout_constraintStart_toEndOf="@+id/usereditimage"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.621" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TableLayout
+        android:id="@+id/resttable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.75">
+
+        <TextView
+            android:id="@+id/nome"
+            android:text="@string/nome" />
+
+        <EditText
+            android:id="@+id/editnometext"
+            android:hint="Seu nome e sobrenome"
+            android:editable="false"/>
+
+        <TextView android:text="@string/email" />
+
+        <EditText
+            android:id="@+id/editemailtext"
+            android:hint="joaosousa@example.com"
+            android:editable="false"/>
+
+        <TextView android:text="@string/senha" />
+
+        <TableLayout android:id="@+id/edittable"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/editsenhatext"
+                android:hint="Sua senha"
+                android:inputType="textPassword"
+                android:editable="false"/>
+
+            <TextView android:text="@string/confirmasenha" android:visibility="invisible" />
+
+            <EditText
+                android:id="@+id/editconfirmatext"
+                android:hint="Repita sua senha"
+                android:inputType="textPassword"
+                android:editable="false"
+                android:visibility="invisible"/>
+
+            <TextView android:text="@string/telefone" />
+
+            <EditText
+                android:id="@+id/edittelefonetext"
+                android:hint="(00)0000-0000"
+                android:inputType="number"
+                android:editable="false"/>
+        </TableLayout>
+
+        <CheckBox
+            android:id="@+id/editcheck"
+            android:text="@string/editar"
+            android:textSize="20dp" />
+
+        <Button
+            android:id="@+id/editbtn"
+            android:background="@color/toolbar"
+            android:text="@string/salvar"
+            android:textColor="@color/branco"
+            android:visibility="invisible"/>
+        <Button
+            android:id="@+id/postbtn"
+            android:background="@color/toolbar"
+            android:text="@string/mypost"
+            android:textColor="@color/branco" />
+
+    </TableLayout>
+
+    <Button
+        android:id="@+id/exitbtn"
+        style="?attr/buttonBarButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="6dp"
+        android:text="@string/sair" />
+</LinearLayout>

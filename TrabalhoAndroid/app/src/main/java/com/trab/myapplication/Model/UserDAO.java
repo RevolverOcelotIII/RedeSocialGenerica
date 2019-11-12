@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 
@@ -55,11 +56,19 @@ public class UserDAO {
         return list;
     }
     public boolean editUser(User usuario){
-        write.execSQL("INSERT INTO "+ConnectionFactory.TABELA_USER+" VALUES('"+usuario.nome+"','"+usuario.email+"','"+usuario.senha+"','"+usuario.telefone+"','"+usuario.imagesource+"') WHERE ID="+usuario.id+"");
+        write.execSQL("INSERT INTO "+ConnectionFactory.TABELA_USER+" VALUES('"+usuario.nome+"','"+usuario.email+"','"+usuario.senha+"','"+usuario.telefone+"','"+usuario.imagesource+"') WHERE ID=="+usuario.id+"");
         return true;
     }
     public boolean searchUserByEmail(String email){
         Cursor cursor = read.rawQuery("SELECT EMAIL FROM "+ConnectionFactory.TABELA_USER+" WHERE EMAIL='"+email+"';",null);
+        if(cursor==null){
+            return false;
+        }else {
+            return true;
+        }
+    }
+    public boolean searchUserByEmailAndPassword(String email,String password){
+        Cursor cursor = read.rawQuery("SELECT EMAIL FROM "+ConnectionFactory.TABELA_USER+" WHERE EMAIL=='"+email+"' AND SENHA=='"+password+"';",null);
         if(cursor==null){
             return false;
         }else {

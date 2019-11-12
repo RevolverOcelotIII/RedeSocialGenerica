@@ -11,4 +11,8 @@
     <string name="cadastrar">Cadastrar</string>
     <string name="logar">Entrar</string>
     <string name="imageselect">Selecionar imagem</string>
+    <string name="editar">Editar cadastro</string>
+    <string name="salvar">Salvar</string>
+    <string name="mypost">Minhas postagens</string>
+    <string name="sair">Sair</string>
 </resources>

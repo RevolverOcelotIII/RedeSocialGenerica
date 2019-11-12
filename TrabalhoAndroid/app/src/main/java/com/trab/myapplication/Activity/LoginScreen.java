@@ -30,7 +30,7 @@ import java.io.InputStream;
 
 public class LoginScreen extends AppCompatActivity {
     public static final String SAVED_USER = "user_data";
-    final UserDAO userDAO = new UserDAO(getApplicationContext());
+    private UserDAO userDAO;
     final User user = new User();
     public boolean imagechosed=false;
     public final Button srchbtn = (Button) findViewById(R.id.catchimage);
@@ -38,6 +38,8 @@ public class LoginScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
+        userDAO = new UserDAO(getApplicationContext());
+
         final Toolbar customtoolbar = findViewById(R.id.customtoolbar);
         customtoolbar.setTitle(R.string.cadastrar);
         setSupportActionBar(customtoolbar);
@@ -96,9 +98,26 @@ public class LoginScreen extends AppCompatActivity {
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putInt("LoggedUserId", user.id);
                             editor.commit();
+                            finish();
+                            Intent intent = new Intent(LoginScreen.this,TimeLine.class);
+                            startActivity(intent);
                         }catch (Exception e){
                             Toast.makeText(getApplicationContext(),"Não foi possivel efetuar o cadastro, veja o que deu errado aí, mas também pode ter sido erro nosso, então desculpa se for :)",Toast.LENGTH_LONG).show();
                         }
+                    }
+                }else{
+                    if(user.nome==""||user.telefone==""||user.email==""||user.senha==""||!imagechosed){
+                        Toast.makeText(getApplicationContext(),"Não foi possivel efetuar o login :0 , veja o que deu errado aí",Toast.LENGTH_LONG).show();
+                    }else{
+                        if(userDAO.searchUserByEmailAndPassword(user.email,user.senha)){
+                            SharedPreferences preferences = getSharedPreferences(SAVED_USER, 0);
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putInt("LoggedUserId", user.id);
+                            editor.commit();
+                            finish();
+                            Intent intent = new Intent(LoginScreen.this,TimeLine.class);
+                            startActivity(intent);
+                        }else Toast.makeText(getApplicationContext(),"Usuário e/ou senha incorretos >:(",Toast.LENGTH_LONG).show();
                     }
                 }
             }

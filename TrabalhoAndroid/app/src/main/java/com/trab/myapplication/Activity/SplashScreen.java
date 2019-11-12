@@ -17,6 +17,7 @@ import java.util.TimerTask;
 public class SplashScreen extends AppCompatActivity {
     long delay = 100;
     int percent = 0;
+    TimerTask timer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +25,7 @@ public class SplashScreen extends AppCompatActivity {
         final ProgressBar progressbar = (ProgressBar) findViewById(R.id.progressBar);
         progressbar.getProgressDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.SRC_IN);
         final TextView showPercent = (TextView) findViewById(R.id.progress);
-        final Timer timer = new Timer();
+        /*final Timer timer = new Timer();
         final TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -35,14 +36,46 @@ public class SplashScreen extends AppCompatActivity {
                     timer.cancel();
                     finish();
                     SharedPreferences preferences = getSharedPreferences(LoginScreen.SAVED_USER,0);
-                    if(preferences.contains("LoggedUserId")){
-
+                    if(preferences.contains("LoggedUserId")&&preferences.getInt("LoggedUserId",-1)>=0){
+                        Intent intent = new Intent(SplashScreen.this,TimeLine.class);
+                        startActivity(intent);
+                    }else{
+                        Intent intent = new Intent(SplashScreen.this,LoginScreen.class);
+                        startActivity(intent);
                     }
-                    Intent intent = new Intent(SplashScreen.this,LoginScreen.class);
-                    startActivity(intent);
                 }
             }
         };
-        timer.schedule(timerTask,delay);
+        timer.schedule(timerTask,delay);*/
+
+        final Timer t = new Timer();
+        timer = new TimerTask() {
+            @Override
+            public void run() {
+                percent++;
+                progressbar.setProgress(percent);
+                showPercent.setText(percent+"%");
+                if(percent == 100){
+                    t.cancel();
+                    SharedPreferences preferences = getSharedPreferences(LoginScreen.SAVED_USER,0);
+                    StartActivity(preferences.contains("LoggedUserId")&&preferences.getInt("LoggedUserId",-1)>=0);
+                    finish();
+                }
+            }
+        };
+        t.schedule(timer,0,100);
+        /*if(percent==100){
+            timer.cancel();
+
+        }*/
+    }
+    public void StartActivity(boolean bool){
+        if(bool){
+            Intent intent = new Intent(this,TimeLine.class);
+            startActivity(intent);
+        }else{
+            Intent intent = new Intent(this,LoginScreen.class);
+            startActivity(intent);
+        }
     }
 }
