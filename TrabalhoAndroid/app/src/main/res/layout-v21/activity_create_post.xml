@@ -112,11 +112,12 @@
                 app:layout_constraintStart_toEndOf="@+id/addpicture"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <ImageView
             android:id="@+id/postimagepost"
             android:layout_width="match_parent"
             android:layout_height="252dp"
-            android:visibility="invisible"
+            android:visibility="gone"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
         <Button

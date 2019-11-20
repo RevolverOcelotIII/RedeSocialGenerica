@@ -77,15 +77,15 @@ public class UserDAO {
     }
     public boolean searchUserByEmail(String email){
         Cursor cursor = read.rawQuery("SELECT EMAIL FROM "+ConnectionFactory.TABELA_USER+" WHERE EMAIL='"+email+"';",null);
-        if(cursor==null){
-            return true;
-        }else {
+        if(cursor.getCount()<=0){
             return false;
+        }else {
+            return true;
         }
     }
     public boolean searchUserByEmailAndPassword(String email,String password){
         Cursor cursor = read.rawQuery("SELECT EMAIL FROM "+ConnectionFactory.TABELA_USER+" WHERE EMAIL='"+email+"' AND SENHA='"+password+"';",null);
-        if(cursor==null){
+        if(cursor.getCount()<=0){
             return false;
         }else {
             return true;

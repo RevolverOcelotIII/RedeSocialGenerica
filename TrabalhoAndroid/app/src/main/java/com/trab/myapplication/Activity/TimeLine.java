@@ -120,7 +120,6 @@ public class TimeLine extends AppCompatActivity {
             case 1:
                 Intent intentnew = new Intent(this,CreatePost.class);
                 startActivity(intentnew);
-                finish();
                 break;
             case 2:
                 Intent intentnew2 = new Intent(this,TimeLine.class);

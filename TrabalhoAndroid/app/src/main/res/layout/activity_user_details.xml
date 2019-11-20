@@ -75,7 +75,7 @@
                 android:id="@+id/editsenhatext"
                 android:hint="Sua senha"
                 android:inputType="textPassword"
-                android:editable="false"/>
+                android:enabled="false"/>
 
             <TextView android:text="@string/confirmasenha" android:visibility="gone" />
 
