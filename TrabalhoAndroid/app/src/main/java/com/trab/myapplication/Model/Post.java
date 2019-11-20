@@ -7,7 +7,7 @@ import java.util.Date;
 public class Post implements Serializable {
     public int id;
     public String descricao;
-    public Date datapublicacao;
+    public String datapublicacao;
     public int userid;
     public byte[] imagesource;
 }

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.trab.myapplication.Model.ConnectionFactory;
 import com.trab.myapplication.R;
 
 import java.util.Timer;
@@ -22,6 +23,7 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
+        ConnectionFactory coneccao = new ConnectionFactory(getApplicationContext());
         final ProgressBar progressbar = (ProgressBar) findViewById(R.id.progressBar);
         progressbar.getProgressDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.SRC_IN);
         final TextView showPercent = (TextView) findViewById(R.id.progress);
@@ -52,7 +54,7 @@ public class SplashScreen extends AppCompatActivity {
         timer = new TimerTask() {
             @Override
             public void run() {
-                percent++;
+                percent+=5;
                 progressbar.setProgress(percent);
                 showPercent.setText(percent+"%");
                 if(percent == 100){

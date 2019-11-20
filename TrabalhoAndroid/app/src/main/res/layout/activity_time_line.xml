@@ -4,7 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.TimeLine">
+    tools:context=".Activity.TimeLine"
+    android:background="@color/brancoalfa">
+
+    <LinearLayout
+        android:id="@+id/linearLayoutcreatepost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <include layout="@layout/custom_tool_bar"
+            android:id="@+id/timelinetoolbar"/>
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/postsRecyclerView"
@@ -12,13 +24,53 @@
         android:layout_height="0dp"
         android:layout_marginStart="1dp"
         android:layout_marginLeft="1dp"
-        android:layout_marginTop="1dp"
         android:layout_marginEnd="1dp"
         android:layout_marginRight="1dp"
         android:layout_marginBottom="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutcreatepost" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addfab"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/ic_add_black_24dp"
+        android:backgroundTint="@color/branco"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:layout_marginEnd="88dp"
+        android:layout_marginRight="88dp"
+        android:layout_marginBottom="56dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        android:elevation="6dp"
+
+        />
+
+    <TextView
+        android:id="@+id/nullmessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sem postagens no momento :/"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/postsRecyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/postsRecyclerView"
+        app:layout_constraintTop_toTopOf="@+id/postsRecyclerView" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottmnavigation"
+        android:layout_width="324dp"
+        android:layout_height="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/postsRecyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nullmessage"
+        app:layout_constraintVertical_bias="0.71000004" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

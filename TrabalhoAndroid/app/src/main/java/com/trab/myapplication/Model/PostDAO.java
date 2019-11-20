@@ -23,17 +23,28 @@ public class PostDAO {
         ContentValues values = new ContentValues();
         values.put("descricao",post.descricao);
         values.put("userid",post.userid);
+        if(post.imagesource!=null){
         values.put("imagesource",post.imagesource);
+        }
         values.put("datapublicacao",post.datapublicacao.toString());
         write.insert(ConnectionFactory.TABELA_POST,null,values);
         return true;
     }
+    public boolean haveImage(int postid){
+        Post post = new Post();
+        Cursor cursor = read.rawQuery("SELECT imagesource FROM "+ConnectionFactory.TABELA_POST+" WHERE id = "+postid+";",null);
+        cursor.moveToNext();
+        if (cursor.isNull(cursor.getColumnIndex("imagesource"))){
+            return false;
+        }else return true;
+    }
     public Post getPostFromDB(int postid){
         Post post = new Post();
-        Cursor cursor = read.rawQuery("SELECT * FROM "+ConnectionFactory.TABELA_POST+" WHERE id == "+postid+";",null);
+        Cursor cursor = read.rawQuery("SELECT * FROM "+ConnectionFactory.TABELA_POST+" WHERE id = "+postid+";",null);
+        cursor.moveToNext();
         post.descricao = cursor.getString(cursor.getColumnIndex("descricao"));
         post.imagesource = cursor.getBlob(cursor.getColumnIndex("imagesource"));
-        post.datapublicacao = convertDate(cursor.getString(cursor.getColumnIndex("datapublicacao")));
+        post.datapublicacao = cursor.getString(cursor.getColumnIndex("datapublicacao"));
         post.id = cursor.getInt(cursor.getColumnIndex("id"));
         post.userid = cursor.getInt(cursor.getColumnIndex("userid"));
         return post;
@@ -45,40 +56,29 @@ public class PostDAO {
             Post post = new Post();
             post.descricao = cursor.getString(cursor.getColumnIndex("descricao"));
             post.imagesource = cursor.getBlob(cursor.getColumnIndex("imagesource"));
-            post.datapublicacao = convertDate(cursor.getString(cursor.getColumnIndex("datapublicacao")));
+            post.datapublicacao = cursor.getString(cursor.getColumnIndex("datapublicacao"));
             post.id = cursor.getInt(cursor.getColumnIndex("id"));
             post.userid = cursor.getInt(cursor.getColumnIndex("userid"));
             list.add(post);
+            Log.w("Teste","subindo tela "+post.id);
         }
+        Log.w("Teste","voltando tela tela ");
         return list;
     }
-    public boolean isLiked(int userid, int postid){
-        Cursor cursor = read.rawQuery("SELECT userid FROM "+ConnectionFactory.TABELA_LIKES+" WHERE userid=="+userid+"AND postid=="+postid+";",null);
-        if (cursor==null) return false;
-        else return true;
-    }
-    public boolean Like(int userid,int postid){
-        if(isLiked(userid,postid)){
-            write.execSQL("DELETE FROM "+ ConnectionFactory.TABELA_LIKES +" WHERE userid=="+userid+"AND postid == "+postid+";");
-            return false;
-        }else {
-        ContentValues values = new ContentValues();
-        values.put("userid",userid);
-        values.put("postid",postid);
-        write.insert(ConnectionFactory.TABELA_LIKES,null,values);
-        return true;
+    public ArrayList<Post> getUserPosts(int userid){
+        ArrayList<Post>list = new ArrayList<>();
+        Cursor cursor = read.rawQuery("SELECT * FROM "+ConnectionFactory.TABELA_POST+" WHERE USERID="+userid+";",null);
+        while (cursor.moveToNext()){
+            Post post = new Post();
+            post.descricao = cursor.getString(cursor.getColumnIndex("descricao"));
+            post.imagesource = cursor.getBlob(cursor.getColumnIndex("imagesource"));
+            post.datapublicacao = cursor.getString(cursor.getColumnIndex("datapublicacao"));
+            post.id = cursor.getInt(cursor.getColumnIndex("id"));
+            post.userid = cursor.getInt(cursor.getColumnIndex("userid"));
+            list.add(post);
+            Log.w("Teste","subindo tela "+post.id);
         }
-    }
-    public static Date convertDate(String inputDate){
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
-        String dateInString = inputDate;
-        Date date = null;
-        try {
-            date =sdf.parse(dateInString);
-        }
-        catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return date;
+        Log.w("Teste","voltando tela tela ");
+        return list;
     }
 }

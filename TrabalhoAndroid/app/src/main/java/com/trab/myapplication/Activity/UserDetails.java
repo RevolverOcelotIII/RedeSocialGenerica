@@ -1,5 +1,6 @@
 package com.trab.myapplication.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +12,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -19,7 +23,10 @@ import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
+import com.github.rtoshiro.util.format.SimpleMaskFormatter;
+import com.github.rtoshiro.util.format.text.MaskTextWatcher;
 import com.trab.myapplication.Model.User;
 import com.trab.myapplication.Model.UserDAO;
 import com.trab.myapplication.R;
@@ -29,34 +36,54 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public class UserDetails extends AppCompatActivity {
-    private UserDAO userDAO = new UserDAO(getApplicationContext());
-    final EditText nometext = (EditText) findViewById(R.id.editnometext);
-    final EditText emailtext = (EditText) findViewById(R.id.editemailtext);
-    final EditText senhatext = (EditText) findViewById(R.id.editsenhatext);
-    EditText confirmatext = (EditText) findViewById(R.id.editconfirmatext);
-    final EditText telefonetext = (EditText) findViewById(R.id.edittelefonetext);
-    final TableLayout cadastrotable = (TableLayout) findViewById(R.id.edittable);
-    final CheckBox editcheck = (CheckBox) findViewById(R.id.editcheck);
-    final Button logbtn = (Button) findViewById(R.id.editbtn);
-    final Button postbtn = (Button) findViewById(R.id.postbtn);
-    final Button exitbtn = (Button) findViewById(R.id.exitbtn);
-    final ImageView userpicture = (ImageView) findViewById(R.id.usereditimage);
-    final SharedPreferences preferences = getSharedPreferences(LoginScreen.SAVED_USER, 0);
+    private UserDAO userDAO;
     private boolean imagechosed = true;
     private User loggeduser;
     private User tempuser = new User();
+    private ImageView userpicture;
+    private Toolbar toolbar;
+    private SimpleMaskFormatter smf = new SimpleMaskFormatter("(NN)NNNNN-NNNN");
+    private MaskTextWatcher mtw;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_details);
-        tempuser.imagesource = loggeduser.imagesource;
+        userDAO = new UserDAO(getApplicationContext());
+
+        userpicture = (ImageView) findViewById(R.id.usereditimage);
+        final EditText nometext = (EditText) findViewById(R.id.editnometext);
+        final EditText emailtext = (EditText) findViewById(R.id.editemailtext);
+        final EditText senhatext = (EditText) findViewById(R.id.editsenhatext);
+        final EditText confirmatext = (EditText) findViewById(R.id.editconfirmatext);
+        final EditText telefonetext = (EditText) findViewById(R.id.edittelefonetext);
+        final TableLayout cadastrotable = (TableLayout) findViewById(R.id.edittable);
+        final CheckBox editcheck = (CheckBox) findViewById(R.id.editcheck);
+        final Button logbtn = (Button) findViewById(R.id.editbtn);
+        final Button postbtn = (Button) findViewById(R.id.postbtn);
+        final Button exitbtn = (Button) findViewById(R.id.exitbtn);
+        mtw = new MaskTextWatcher(telefonetext,smf);
+        telefonetext.addTextChangedListener(mtw);
+        final SharedPreferences preferences = getSharedPreferences(LoginScreen.SAVED_USER, 0);
+        toolbar = (Toolbar) findViewById(R.id.userdetailstoolbar);
+        toolbar.setTitle("Usuário");
+        setSupportActionBar(toolbar);
+
+        int userid = preferences.getInt("LoggedUseId",-1);
         loggeduser = userDAO.getUserFromDB(preferences.getInt("LoggedUserId",-1));
+        tempuser.imagesource = loggeduser.imagesource;
         userpicture.setImageBitmap(BitmapFactory.decodeByteArray(loggeduser.imagesource,0,loggeduser.imagesource.length));
         nometext.setText(loggeduser.nome);
         emailtext.setText(loggeduser.email);
         senhatext.setText(loggeduser.senha);
         telefonetext.setText(loggeduser.telefone);
-        editcheck.setOnClickListener(new View.OnClickListener() {
+        postbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityUserPosts();
+            }
+        });
+
+        /*editcheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(editcheck.isChecked()){
@@ -70,38 +97,39 @@ public class UserDetails extends AppCompatActivity {
                     nometext.setEnabled(false);
                     emailtext.setEnabled(false);
                     senhatext.setEnabled(false);
-                    confirmatext.setVisibility(View.INVISIBLE);
+                    confirmatext.setVisibility(View.GONE);
                     telefonetext.setEnabled(false);
-                    logbtn.setVisibility(View.INVISIBLE);
+                    logbtn.setVisibility(View.GONE);
                 }
             }
-        });
+        });*/
         exitbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putInt("LoggedUserId", -1);
                 editor.commit();
-                Intent intent = new Intent(UserDetails.this,LoginScreen.class);
+                Intent intent = new Intent(UserDetails.this,SplashScreen.class);
                 startActivity(intent);
+                finish();
             }
         });
         logbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(nometext.getText().equals("")||telefonetext.getText().equals("")||emailtext.getText().equals("")||senhatext.getText().equals("")||!imagechosed){
-                    Toast.makeText(getApplicationContext(),"Não foi possivel efetuar o login :0 , veja o que deu errado aí",Toast.LENGTH_LONG).show();
+                if(nometext.getText().equals("")||telefonetext.getText().equals("")||emailtext.getText().equals("")||senhatext.getText().equals("")){
+                    Toast.makeText(getApplicationContext(),"Não foi possivel editar o cadastro :0 , veja o que deu errado aí",Toast.LENGTH_LONG).show();
                 }else{
-                if(senhatext.getText().equals(confirmatext.getText())){
-                    tempuser.senha = senhatext.getText().toString();
-                    tempuser.id = loggeduser.id;
-                    tempuser.email = emailtext.getText().toString();
-                    tempuser.telefone = telefonetext.getText().toString();
-                    tempuser.nome = nometext.getText().toString();
-                    userDAO.editUser(tempuser);
-                }else {
-                    Toast.makeText(getApplicationContext(), "Os campos de senha e confirmação de senha não combinam >:(", Toast.LENGTH_LONG).show();
-                }
+                    if(senhatext.getText().equals(confirmatext.getText())){
+                        tempuser.id = loggeduser.id;
+                        tempuser.email = emailtext.getText().toString();
+                        tempuser.telefone = telefonetext.getText().toString();
+                        tempuser.nome = nometext.getText().toString();
+                        userDAO.editUser(tempuser);
+                        startActivityByButton(true);
+                    }else {
+                        Toast.makeText(getApplicationContext(), "Os campos de senha e confirmação de senha não combinam >:(", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });
@@ -126,10 +154,44 @@ public class UserDetails extends AppCompatActivity {
                 bitmap.compress(Bitmap.CompressFormat.JPEG,100,stream);
                 byte imageInByte[] = stream.toByteArray();
                 tempuser.imagesource = imageInByte;
+                userpicture.setImageBitmap(bitmap);
                 //Bitmap btm = BitmapFactory.decodeByteArray(imageInByte,0,imageInByte.length);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
         }
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.tool_bar_itens, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.userpage:
+                startActivityByButton(true);
+                break;
+            case R.id.timeLine:
+                startActivityByButton(false);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    private void startActivityByButton(boolean contexto){
+        if(contexto){
+            Intent intent = new Intent(this,UserDetails.class);
+            startActivity(intent);
+            finish();
+        }else{
+            Intent intent = new Intent(this,TimeLine.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+    private void startActivityUserPosts(){
+        Intent intent = new Intent(this,TimeLine.class);
+        intent.putExtra("useronly",true);
+        startActivity(intent);
     }
 }

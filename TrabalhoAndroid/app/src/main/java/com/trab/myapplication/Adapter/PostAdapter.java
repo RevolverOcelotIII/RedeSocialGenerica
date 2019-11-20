@@ -1,11 +1,8 @@
 package com.trab.myapplication.Adapter;
 
-import android.annotation.SuppressLint;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,18 +37,25 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         this.users = users;
         this.likeds = likeds;
         this.currentUserId = currentUserId;
+        Log.w("Teste","Adapter definido");
     }
 
     @Override
     public void onBindViewHolder(@NonNull final PostViewHolder holder, final int position) {
-        Post post = posts.get(position);
-        holder.user.setImageBitmap(BitmapFactory.decodeByteArray(users.get(position).imagesource,
-                0,users.get(position).imagesource.length));
-        holder.image.setImageBitmap(BitmapFactory.decodeByteArray(posts.get(position).imagesource,
-                0,posts.get(position).imagesource.length));
-        holder.username.setText(users.get(position).nome);
-        holder.description.setText(posts.get(position).descricao);
-        holder.like = changethemes(likeds.get(position),holder.like);
+        Log.w("Teste","chegou no viewholder binder " +position);
+        Post post = posts.get((posts.size() - position)-1);
+        holder.user.setImageBitmap(BitmapFactory.decodeByteArray(users.get((posts.size() - position)-1).imagesource,
+                0,users.get((posts.size() - position)-1).imagesource.length));
+        if(posts.get((posts.size() - position)-1).imagesource==null){
+            holder.image.setVisibility(View.GONE);
+        }else {
+            holder.image.setImageBitmap(BitmapFactory.decodeByteArray(posts.get((posts.size() - position)-1).imagesource,
+                    0,posts.get((posts.size() - position)-1).imagesource.length));
+        }
+        holder.username.setText(users.get((posts.size() - position)-1).nome);
+        holder.description.setText(posts.get((posts.size() - position)-1).descricao);
+        holder.datetime.setText(posts.get((posts.size() - position)-1).datapublicacao.toString());
+        /*holder.like = changethemes(likeds.get(position),holder.like);
         holder.like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,12 +63,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                 PostDAO postDAO = new PostDAO(view.getContext());
                 postDAO.Like(currentUserId,posts.get(position).id);
             }
-        });
+        });*/
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return posts.size();
     }
 
     public class PostViewHolder extends RecyclerView.ViewHolder{
@@ -77,6 +81,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
+            Log.w("Teste","chegou no viewholder");
             username = (TextView) itemView.findViewById(R.id.usernamefield);
             datetime = (TextView) itemView.findViewById(R.id.datetimefield);
             description = (TextView) itemView.findViewById(R.id.descricaofield);
@@ -85,7 +90,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             like = (Button) itemView.findViewById(R.id.likebtn);
         }
     }
-    public Button changethemes(boolean whichone,Button change){
+    /*public Button changethemes(boolean whichone,Button change){
         if(whichone){
             change.setBackgroundColor(change.getContext().getResources().getColor(R.color.toolbar));
             Drawable img = change.getContext().getResources().getDrawable( R.drawable.ic_favorite_black_24dp );
@@ -100,5 +105,5 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             change.setTextColor(change.getContext().getResources().getColor(R.color.branco));
         }
         return change;
-    }
+    }*/
 }

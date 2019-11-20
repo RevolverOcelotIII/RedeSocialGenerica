@@ -6,23 +6,34 @@
     android:layout_height="match_parent"
     tools:context=".Activity.LoginScreen">
 
-    <include
-        android:id="@+id/include2"
-        layout="@layout/custom_tool_bar" />
+    <TextView
+        android:id="@+id/texttitle"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/toolbar"
+        android:elevation="5dp"
+        android:gravity="center"
+        android:text="@string/cadastro"
+        android:textColor="@color/branco"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/catchimage"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="7dp"
         android:background="@color/toolbar"
         android:elevation="4dp"
         android:text="@string/imageselect"
         android:textColor="@color/branco"
         app:layout_constraintBottom_toTopOf="@+id/tableLayout2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.532"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include2" />
+        app:layout_constraintTop_toBottomOf="@+id/texttitle"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TableLayout
         android:id="@+id/tableLayout2"
@@ -30,11 +41,9 @@
         android:layout_height="wrap_content"
         android:elevation="4dp"
         android:padding="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.75">
+        app:layout_constraintTop_toBottomOf="@+id/catchimage">
 
         <TextView
             android:id="@+id/nome"
@@ -52,12 +61,14 @@
 
         <TextView android:text="@string/senha" />
 
-        <TableLayout android:id="@+id/cadastrotable">
+        <EditText
+            android:id="@+id/senhatext"
+            android:hint="Sua senha"
+            android:inputType="textPassword"
+            tools:layout_editor_absoluteX="10dp"
+            tools:layout_editor_absoluteY="374dp" />
 
-            <EditText
-                android:id="@+id/senhatext"
-                android:hint="Sua senha"
-                android:inputType="textPassword" />
+        <TableLayout android:id="@+id/cadastrotable">
 
             <TextView android:text="@string/confirmasenha" />
 
@@ -86,5 +97,6 @@
             android:text="@string/cadastrar"
             android:textColor="@color/branco" />
     </TableLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

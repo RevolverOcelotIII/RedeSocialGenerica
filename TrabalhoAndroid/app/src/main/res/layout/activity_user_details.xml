@@ -7,14 +7,24 @@
     android:orientation="vertical"
     tools:context=".Activity.UserDetails">
 
+    <LinearLayout
+        android:id="@+id/linearLayoutuserdetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <include layout="@layout/custom_tool_bar"
+            android:id="@+id/userdetailstoolbar"/>
+    </LinearLayout>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/usereditimage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.056"
@@ -22,18 +32,18 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
 
-        <TextView
-            android:id="@+id/usernamefield"
+        <EditText
+            android:id="@+id/editnometext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Daniel Galdino"
-            android:textSize="30sp"
+            android:editable="false"
+            android:textSize="30dp"
+            android:hint="Seu nome"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.173"
+            app:layout_constraintHorizontal_bias="0.224"
             app:layout_constraintStart_toEndOf="@+id/usereditimage"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.621" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <TableLayout
@@ -46,16 +56,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.75">
-
-        <TextView
-            android:id="@+id/nome"
-            android:text="@string/nome" />
-
-        <EditText
-            android:id="@+id/editnometext"
-            android:hint="Seu nome e sobrenome"
-            android:editable="false"/>
+        app:layout_constraintVertical_bias="0.75"
+        android:scrollbars="vertical">
 
         <TextView android:text="@string/email" />
 
@@ -75,14 +77,14 @@
                 android:inputType="textPassword"
                 android:editable="false"/>
 
-            <TextView android:text="@string/confirmasenha" android:visibility="invisible" />
+            <TextView android:text="@string/confirmasenha" android:visibility="gone" />
 
             <EditText
                 android:id="@+id/editconfirmatext"
                 android:hint="Repita sua senha"
                 android:inputType="textPassword"
                 android:editable="false"
-                android:visibility="invisible"/>
+                android:visibility="gone"/>
 
             <TextView android:text="@string/telefone" />
 
@@ -95,6 +97,7 @@
 
         <CheckBox
             android:id="@+id/editcheck"
+            android:checked="false"
             android:text="@string/editar"
             android:textSize="20dp" />
 
@@ -103,7 +106,7 @@
             android:background="@color/toolbar"
             android:text="@string/salvar"
             android:textColor="@color/branco"
-            android:visibility="invisible"/>
+            android:visibility="gone"/>
         <Button
             android:id="@+id/postbtn"
             android:background="@color/toolbar"
