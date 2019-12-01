@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,9 +24,13 @@ import android.widget.Toast;
 
 import com.github.rtoshiro.util.format.SimpleMaskFormatter;
 import com.github.rtoshiro.util.format.text.MaskTextWatcher;
+import com.trab.myapplication.Net.JsonCreator;
+import com.trab.myapplication.Net.WsConnector;
 import com.trab.myapplication.R;
 import com.trab.myapplication.Model.User;
 import com.trab.myapplication.Model.UserDAO;
+
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -113,6 +118,7 @@ public class LoginScreen extends AppCompatActivity {
                                     if(user.senha.equals(confirmasenha)){
                                         try {
                                             userDAO.saveUser(user);
+                                            new CadastrarUser().execute(user);
                                             SharedPreferences preferences = getSharedPreferences(SAVED_USER, 0);
                                             SharedPreferences.Editor editor = preferences.edit();
                                             editor.putInt("LoggedUserId", userDAO.getUserIDFromDBbyEmail(user.email));
@@ -172,4 +178,23 @@ public class LoginScreen extends AppCompatActivity {
             }
         }
     }
+
+    public class CadastrarUser extends AsyncTask<User, Void, Void>
+    {
+        @Override
+        protected Void doInBackground(User... users)
+        {
+            try {
+                User user = users[0];
+                JSONObject jsonObject = new JsonCreator().convertUser(user);
+
+                WsConnector.post("/users", jsonObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+    }
+
 }

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -12,6 +13,8 @@ import com.trab.myapplication.Model.Post;
 import com.trab.myapplication.Model.PostDAO;
 import com.trab.myapplication.Model.User;
 import com.trab.myapplication.Model.UserDAO;
+import com.trab.myapplication.Net.JsonCreator;
+import com.trab.myapplication.Net.WsConnector;
 import com.trab.myapplication.R;
 
 import androidx.annotation.NonNull;
@@ -30,6 +33,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
+
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -164,6 +169,24 @@ public class CreatePost extends AppCompatActivity {
         }else{
             Intent intent = new Intent(this,TimeLine.class);
             startActivity(intent);
+        }
+    }
+
+    public class CadastrarPost extends AsyncTask<Post, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Post... posts)
+        {
+            Post post = posts[0];
+
+            try {
+                JSONObject jsonObject = new JsonCreator().convertPost(post, currentuser.email);
+                WsConnector.post("/posts", jsonObject);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+
+            return null;
         }
     }
 }

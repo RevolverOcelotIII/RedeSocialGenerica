@@ -30,6 +30,11 @@ public class PostDAO {
         write.insert(ConnectionFactory.TABELA_POST,null,values);
         return true;
     }
+
+    public void deleteAllPosts ()
+    {
+        write.delete(ConnectionFactory.TABELA_POST, "1=1", null);
+    }
     public boolean haveImage(int postid){
         Post post = new Post();
         Cursor cursor = read.rawQuery("SELECT imagesource FROM "+ConnectionFactory.TABELA_POST+" WHERE id = "+postid+";",null);

@@ -9,5 +9,4 @@ public class User implements Serializable {
     public String senha;
     public String telefone;
     public byte[] imagesource;
-
 }
