@@ -5,13 +5,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.service.autofill.UserData;
+import android.util.SparseLongArray;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.trab.myapplication.Model.ConnectionFactory;
+import com.trab.myapplication.Model.User;
+import com.trab.myapplication.Model.UserDAO;
+import com.trab.myapplication.Net.JsonCreator;
+import com.trab.myapplication.Net.WsConnector;
 import com.trab.myapplication.R;
+import com.trab.myapplication.Model.ConnectionFactory;
 
+import org.json.JSONArray;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -49,7 +60,7 @@ public class SplashScreen extends AppCompatActivity {
             }
         };
         timer.schedule(timerTask,delay);*/
-
+        new LoadUsers().execute();
         final Timer t = new Timer();
         timer = new TimerTask() {
             @Override
@@ -78,6 +89,26 @@ public class SplashScreen extends AppCompatActivity {
         }else{
             Intent intent = new Intent(this,LoginScreen.class);
             startActivity(intent);
+        }
+    }
+
+    public class LoadUsers extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids){
+            try{
+                UserDAO userDAO = new UserDAO(SplashScreen.this);
+                JSONArray array = new JSONArray(WsConnector.getResponseData(WsConnector.get("/users")));
+                for (int i = 0; i < array.length(); i++) {
+                    User u = new JsonCreator().createUserFromJson(array.getJSONObject(i));
+                    if (!userDAO.searchUserByEmail(u.email))
+                        userDAO.saveUser(u);
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+
+            return null;
         }
     }
 }

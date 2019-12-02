@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -28,8 +29,13 @@ import com.trab.myapplication.Model.Post;
 import com.trab.myapplication.Model.PostDAO;
 import com.trab.myapplication.Model.User;
 import com.trab.myapplication.Model.UserDAO;
+import com.trab.myapplication.Net.JsonCreator;
+import com.trab.myapplication.Net.WsConnector;
 import com.trab.myapplication.R;
 
+import org.json.JSONArray;
+
+import java.sql.Time;
 import java.util.ArrayList;
 
 public class TimeLine extends AppCompatActivity {
@@ -65,31 +71,7 @@ public class TimeLine extends AppCompatActivity {
         Intent intent = getIntent();
         boolean useronly = intent.getBooleanExtra("useronly",false);
 
-        if(useronly){
-
-            postagens = postDAO.getUserPosts(preferences.getInt("LoggedUserId",-1));
-
-        }else postagens = postDAO.getAllPosts();
-
-        if(postagens.isEmpty()){
-            TextView nullview = (TextView) findViewById(R.id.nullmessage);
-            nullview.setVisibility(View.VISIBLE);
-        }
-
-        postRecyclerView = (RecyclerView) findViewById(R.id.postsRecyclerView);
-        //Layout
-        RecyclerView.LayoutManager postlayout = new LinearLayoutManager(this);
-        postRecyclerView.setLayoutManager(postlayout);
-        //Adapter
-        SharedPreferences preferences = getSharedPreferences(LoginScreen.SAVED_USER,0);
-        int loggeduser = preferences.getInt("LoggedUserId",0);
-        for(Post p : postagens){
-            User user = userDAO.getUserFromDB(p.userid);
-            //Bitmap userpic = BitmapFactory.decodeByteArray(user.imagesource,0,user.imagesource.length);
-            users.add(user);
-        }
-        PostAdapter postAdapter = new PostAdapter(postagens,users,isliked,loggeduser);
-        postRecyclerView.setAdapter(postAdapter);
+        new UpdatePost().execute(useronly);
     }
 
     @Override
@@ -126,6 +108,56 @@ public class TimeLine extends AppCompatActivity {
                 startActivity(intentnew2);
                 finish();
                 break;
+        }
+    }
+
+    public class UpdatePost extends AsyncTask<Boolean, Void, Boolean>{
+        @Override
+        protected Boolean doInBackground(Boolean... booleans) {
+            postDAO.deleteAllPosts();
+
+            try{
+                JSONArray array = new JSONArray(WsConnector.getResponseData(WsConnector.get("/posts")));
+                for (int i = 0; i < array.length(); i++) {
+                    Post post = new JsonCreator().createPostFromJson(array.getJSONObject(i));
+                    post.userid = userDAO.getUserFromDB(userDAO.getUserIDFromDBbyEmail(array.getJSONObject(i).getString("user"))).id;
+                    postDAO.savePost(post);
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean useronly) {
+            super.onPostExecute(useronly);
+            if(useronly){
+
+                postagens = postDAO.getUserPosts(preferences.getInt("LoggedUserId",-1));
+
+            }else postagens = postDAO.getAllPosts();
+
+            if(postagens.isEmpty()){
+                TextView nullview = (TextView) findViewById(R.id.nullmessage);
+                nullview.setVisibility(View.VISIBLE);
+            }
+
+            postRecyclerView = (RecyclerView) findViewById(R.id.postsRecyclerView);
+            //Layout
+            RecyclerView.LayoutManager postlayout = new LinearLayoutManager(TimeLine.this);
+            postRecyclerView.setLayoutManager(postlayout);
+            //Adapter
+            SharedPreferences preferences = getSharedPreferences(LoginScreen.SAVED_USER,0);
+            int loggeduser = preferences.getInt("LoggedUserId",0);
+            for(Post p : postagens){
+                User user = userDAO.getUserFromDB(p.userid);
+                //Bitmap userpic = BitmapFactory.decodeByteArray(user.imagesource,0,user.imagesource.length);
+                users.add(user);
+            }
+            PostAdapter postAdapter = new PostAdapter(postagens,users,isliked,loggeduser);
+            postRecyclerView.setAdapter(postAdapter);
         }
     }
 }
