@@ -127,7 +127,7 @@ public class TimeLine extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            return null;
+            return false;
         }
 
         @Override
