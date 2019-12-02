@@ -82,8 +82,8 @@ public class CreatePost extends AppCompatActivity {
         today = new Date();
         String pattern = "dd/MM/yyyy HH:mm";
         DateFormat df = new SimpleDateFormat(pattern);
-        nomefield.setText(currentuser.nome);
         datefield.setText(df.format(today));
+        nomefield.setText(currentuser.nome);
         userpic.setImageBitmap(BitmapFactory
                 .decodeByteArray(currentuser.imagesource,0,currentuser.imagesource.length));
 

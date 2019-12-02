@@ -14,7 +14,6 @@ public class ConnectionFactory extends SQLiteOpenHelper {
     public static String NAME = "redesocialgenerica";
     public static String TABELA_USER = "usuario";
     public static String TABELA_POST = "post";
-    public static String TABELA_LIKES = "likes";
     public ConnectionFactory(@Nullable Context context) {
         super(context, NAME, null, VERSION);
     }
@@ -37,13 +36,6 @@ public class ConnectionFactory extends SQLiteOpenHelper {
                             "    userid int,\n" +
                             "    datapublicacao varchar(10),\n" +
                             "    foreign key (userid) references "+TABELA_USER+"(id));");
-            db.execSQL(
-                    "create table if not exists "+TABELA_LIKES+"(\n" +
-                            "\t userid integer primary key,\n" +
-                            " postid integer,\n" +
-                            " foreign key (userid) references "+TABELA_USER+"(id)," +
-                            " foreign key (postid) references "+TABELA_POST+"(id));"
-            );
             Log.w("Teste","Todas as tabelas foram criadas com sucesso");
         }catch(Exception e){
 
@@ -75,9 +67,11 @@ public class ConnectionFactory extends SQLiteOpenHelper {
         }
     }
 
-    /*@Override
+    @Override
     public void onOpen(SQLiteDatabase db) {
-        db.execSQL("delete from "+TABELA_POST+";");
-        db.execSQL("delete from "+TABELA_USER+";");
-    }*/
+        //db.execSQL("delete from " + TABELA_POST + ";");
+        //db.execSQL("delete from " + TABELA_USER + ";");
+        //db.execSQL("drop table if exists "+TABELA_USER+";");
+        //db.execSQL("drop table if exists "+TABELA_POST+";");
+    }
 }

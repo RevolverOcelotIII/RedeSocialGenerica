@@ -56,7 +56,7 @@ public class SplashScreen extends AppCompatActivity {
             public void run() {
                 percent+=5;
                 progressbar.setProgress(percent);
-                showPercent.setText(percent+"%");
+                //showPercent.setText(percent+"%");
                 if(percent == 100){
                     t.cancel();
                     SharedPreferences preferences = getSharedPreferences(LoginScreen.SAVED_USER,0);
