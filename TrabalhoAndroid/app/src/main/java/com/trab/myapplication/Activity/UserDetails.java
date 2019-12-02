@@ -51,13 +51,12 @@ public class UserDetails extends AppCompatActivity {
         userDAO = new UserDAO(getApplicationContext());
 
         userpicture = (ImageView) findViewById(R.id.usereditimage);
-        final EditText nometext = (EditText) findViewById(R.id.editnometext);
-        final EditText emailtext = (EditText) findViewById(R.id.editemailtext);
-        final EditText senhatext = (EditText) findViewById(R.id.editsenhatext);
-        final EditText confirmatext = (EditText) findViewById(R.id.editconfirmatext);
-        final EditText telefonetext = (EditText) findViewById(R.id.edittelefonetext);
+        final TextView nometext = (TextView) findViewById(R.id.editnometext);
+        final TextView emailtext = (TextView) findViewById(R.id.editemailtext);
+        final TextView senhatext = (TextView) findViewById(R.id.editsenhatext);
+        final TextView confirmatext = (TextView) findViewById(R.id.editconfirmatext);
+        final TextView telefonetext = (TextView) findViewById(R.id.edittelefonetext);
         final TableLayout cadastrotable = (TableLayout) findViewById(R.id.edittable);
-        final CheckBox editcheck = (CheckBox) findViewById(R.id.editcheck);
         final Button logbtn = (Button) findViewById(R.id.editbtn);
         final Button postbtn = (Button) findViewById(R.id.postbtn);
         final Button exitbtn = (Button) findViewById(R.id.exitbtn);
